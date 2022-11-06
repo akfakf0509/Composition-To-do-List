@@ -1,19 +1,18 @@
 <script setup lang="ts">
 export interface Props {
-    id: number;
     title: string;
     isDone: boolean;
 }
 export interface Emits {
-    (e: "change", id: number, isDone: boolean): void;
+    (e: "change", isDone: boolean): void;
 }
 
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
-const { id, isDone, title } = toRefs(props);
+const { isDone, title } = toRefs(props);
 
 function emitChange() {
-    emit("change", id.value, !isDone.value);
+    emit("change", !isDone.value);
 }
 </script>
 
