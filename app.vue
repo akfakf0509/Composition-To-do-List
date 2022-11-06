@@ -20,7 +20,10 @@ function updateIsDone(i: number, isDone: boolean) {
     workList.value.splice(i, 1, { ...workList.value[i], isDone });
 }
 function pushWork(title: string, content: string) {
-    workList.value.push(createWork(title, false, content));
+    workList.value.push(createWork(content, false, title));
+}
+function removeWork(i: number) {
+    workList.value.splice(i, 1);
 }
 </script>
 
@@ -32,6 +35,7 @@ function pushWork(title: string, content: string) {
                 v-for="(work, i) in workList"
                 v-bind="work"
                 @change="updateIsDone(i, $event)"
+                @delete="removeWork(i)"
             />
         </ul>
     </div>
