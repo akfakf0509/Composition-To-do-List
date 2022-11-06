@@ -1,7 +1,9 @@
 <script setup lang="ts">
 export interface Props {
-    title: string;
+    content: string;
+    id: number;
     isDone: boolean;
+    title: string;
 }
 export interface Emits {
     (e: "change", isDone: boolean): void;
@@ -9,7 +11,14 @@ export interface Emits {
 
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
-const { isDone, title } = toRefs(props);
+const { content, id, isDone, title } = toRefs(props);
+
+const titleClasses = computed(() => {
+    return [
+        "work-card__header__title",
+        { "work-card__header__title--done": isDone.value },
+    ];
+});
 
 function emitChange() {
     emit("change", !isDone.value);
@@ -18,16 +27,40 @@ function emitChange() {
 
 <template>
     <li class="work-card">
-        <input type="checkbox" :checked="isDone" @change="emitChange" />
-        <p class="work-card__title">{{ title }}</p>
-        이것은 내용이여
+        <p class="work-card__header">
+            <input
+                :id="`checkbox-${id}`"
+                class="work-card__header__checkbox"
+                type="checkbox"
+                :checked="isDone"
+                @change="emitChange"
+            />
+            <label :for="`checkbox-${id}`" :class="titleClasses">
+                {{ title }}
+            </label>
+        </p>
+        <p class="work-card__content">{{ content }}</p>
     </li>
 </template>
 
 <style lang="scss" scoped>
 .work-card {
-    &__title {
-        color: red;
+    padding: 12px;
+    border: 1px solid gray;
+    border-radius: 8px;
+
+    &__header {
+        &__title {
+            font-size: 1.2rem;
+
+            &--done {
+                text-decoration: line-through;
+            }
+        }
+    }
+    &__content {
+        margin-top: 4px;
+        color: dimgray;
     }
 }
 </style>
