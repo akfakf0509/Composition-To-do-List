@@ -2,58 +2,43 @@
 import { Ref } from "vue";
 import { Props as WorkCardProps } from "~/components/WorkCard.vue";
 
+let key = ref(0);
 const workList: Ref<WorkCardProps[]> = ref([]);
 
-workList.value.push({
-    content: "This is content",
-    id: 1,
-    isDone: true,
-    title: "1",
-});
-workList.value.push({
-    content: "This is content",
-    id: 2,
-    isDone: false,
-    title: "2",
-});
-workList.value.push({
-    content: "This is content",
-    id: 3,
-    isDone: false,
-    title: "3",
-});
-workList.value.push({
-    content: "This is content",
-    id: 4,
-    isDone: true,
-    title: "4",
-});
-workList.value.push({
-    content: "This is content",
-    id: 5,
-    isDone: false,
-    title: "5",
-});
-
-function handleChange(i: number, isDone: boolean) {
+function updateIsDone(i: number, isDone: boolean) {
     workList.value.splice(i, 1, { ...workList.value[i], isDone });
+}
+function createWork(title: string, content: string) {
+    workList.value.push({ content, id: key.value++, isDone: false, title });
 }
 </script>
 
 <template>
-    <ul class="list">
-        <WorkCard
-            v-for="(work, i) in workList"
-            v-bind="work"
-            @change="handleChange(i, $event)"
-        />
-    </ul>
+    <div class="app">
+        <CreateForm class="app__form" @create="createWork" />
+        <ul class="app__list">
+            <WorkCard
+                v-for="(work, i) in workList"
+                v-bind="work"
+                @change="updateIsDone(i, $event)"
+            />
+        </ul>
+    </div>
 </template>
 
 <style lang="scss" scoped>
-.list {
-    display: grid;
-    gap: 8px;
+.app {
     padding: 8px;
+
+    &__form {
+        padding-bottom: 8px;
+        margin-bottom: 16px;
+        border-bottom: 1px solid gray;
+    }
+
+    &__list {
+        display: grid;
+        gap: 8px;
+    }
 }
 </style>
