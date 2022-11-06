@@ -1,21 +1,32 @@
 <script setup lang="ts">
-import { Ref } from "vue";
-import { Props as WorkCardProps } from "~/components/WorkCard.vue";
+import { Work } from "./composables/work";
 
-let key = ref(0);
-const workList: Ref<WorkCardProps[]> = ref([]);
+let workList = ref<Work[]>([]);
+
+watch(
+    workList,
+    (value) => {
+        save(value);
+    },
+    { deep: true }
+);
+
+onBeforeMount(() => {
+    const loadedData = load();
+    if (loadedData) workList.value = loadedData;
+});
 
 function updateIsDone(i: number, isDone: boolean) {
     workList.value.splice(i, 1, { ...workList.value[i], isDone });
 }
-function createWork(title: string, content: string) {
-    workList.value.push({ content, id: key.value++, isDone: false, title });
+function pushWork(title: string, content: string) {
+    workList.value.push(createWork(title, false, content));
 }
 </script>
 
 <template>
     <div class="app">
-        <CreateForm class="app__form" @create="createWork" />
+        <CreateForm class="app__form" @create="pushWork" />
         <ul class="app__list">
             <WorkCard
                 v-for="(work, i) in workList"
