@@ -6,7 +6,12 @@ export const useWorkStore = defineStore("work", () => {
     const workList = ref<Work[]>([]);
 
     function updateIsDone(index: number, isDone: boolean) {
-        workList.value.splice(index, 1, { ...workList.value[index], isDone });
+        let doneDate = isDone ? new Date() : undefined;
+        workList.value.splice(index, 1, {
+            ...workList.value[index],
+            isDone,
+            doneDate,
+        });
     }
     function pushWork(
         content: Work["content"] = "",
