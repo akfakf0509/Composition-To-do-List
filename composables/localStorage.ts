@@ -17,6 +17,8 @@ export const storageLoad = (): Work[] => {
     const workList: Work[] = [];
     data.split("&").forEach((data) => {
         const work: Work = JSON.parse(data);
+        work.createdDate = new Date(work.createdDate);
+        if (work.doneDate) work.doneDate = new Date(work.doneDate);
         workList.push(work);
     });
     return workList;
