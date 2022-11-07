@@ -1,6 +1,8 @@
 <script setup lang="ts">
 export interface Props {
     content: string;
+    createdDate: Date;
+    doneDate?: Date;
     id: number;
     isDone: boolean;
     title: string;
@@ -12,13 +14,29 @@ export interface Emits {
 
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
-const { content, id, isDone, title } = toRefs(props);
+const { content, createdDate, doneDate, id, isDone, title } = toRefs(props);
 
+const showDoneDate = computed(() => {
+    return !!doneDate?.value;
+});
 const titleClasses = computed(() => {
     return [
         "work-card__header__title",
         { "work-card__header__title--done": isDone.value },
     ];
+});
+const formattedCreatedDate = computed(() => {
+    return Intl.DateTimeFormat("ko", {
+        dateStyle: "long",
+        timeStyle: "short",
+    }).format(createdDate.value);
+});
+const formattedDoneDate = computed(() => {
+    if (!doneDate?.value) return "";
+    return Intl.DateTimeFormat("ko", {
+        dateStyle: "long",
+        timeStyle: "short",
+    }).format(doneDate.value);
 });
 
 function emitChange() {
@@ -44,6 +62,17 @@ function emitDelete() {
             </label>
         </p>
         <p class="work-card__content">{{ content }}</p>
+        <p class="work-card__desc">
+            <span class="work-card__desc__item">
+                생성됨: {{ formattedCreatedDate }}
+            </span>
+            <template v-if="showDoneDate">
+                /
+                <span class="work-card__desc__item">
+                    완료됨: {{ formattedDoneDate }}
+                </span>
+            </template>
+        </p>
         <button class="work-card__delete" @click="emitDelete()">삭제</button>
     </li>
 </template>
@@ -67,6 +96,11 @@ function emitDelete() {
     &__content {
         margin-top: 4px;
         color: dimgray;
+    }
+    &__desc {
+        margin-top: 16px;
+        color: darkgray;
+        font-size: 0.8rem;
     }
     &__delete {
         position: absolute;
