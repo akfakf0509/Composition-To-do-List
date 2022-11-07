@@ -1,8 +1,8 @@
-import { Work } from "./work";
+import Work from "~~/types/Work";
 
 const ITEM_NAME = "workList";
 
-export const save = (workList: Work[]) => {
+export const storageSave = (workList: Work[]) => {
     let convertedStr = "";
     workList.forEach((work, index) => {
         convertedStr += JSON.stringify(work);
@@ -11,7 +11,7 @@ export const save = (workList: Work[]) => {
     localStorage.setItem(ITEM_NAME, convertedStr);
 };
 
-export const load = (): Work[] => {
+export const storageLoad = (): Work[] => {
     const data = localStorage.getItem(ITEM_NAME);
     if (!data) return [];
     const workList: Work[] = [];
@@ -21,6 +21,6 @@ export const load = (): Work[] => {
     });
     return workList;
 };
-export const clear = () => {
+export const storageClear = () => {
     localStorage.removeItem(ITEM_NAME);
 };
