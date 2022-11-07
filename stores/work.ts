@@ -15,6 +15,7 @@ export const useWorkStore = defineStore("work", () => {
     ) {
         workList.value.push({
             content,
+            createdDate: new Date(),
             id: idIndex.value++,
             isDone,
             title,
