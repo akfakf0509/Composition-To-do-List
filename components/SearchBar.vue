@@ -13,3 +13,14 @@ const searchText = ref("");
         <button class="search-bar__button">검색</button>
     </form>
 </template>
+
+<style lang="scss" scoped>
+.search-bar {
+    display: flex;
+    gap: 8px;
+
+    &__input {
+        flex: 1;
+    }
+}
+</style>
