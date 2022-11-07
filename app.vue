@@ -2,7 +2,7 @@
 import { useWorkStore } from "./stores/work";
 
 const store = useWorkStore();
-const { workList, pushWork, removeWork, updateIsDone } = store;
+const { workList, pushWork } = store;
 
 store.$onAction(({ after }) => {
     after(() => {
