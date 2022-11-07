@@ -28,14 +28,7 @@ onMounted(() => {
             class="app__form"
             @create="(title, content) => pushWork(content, false, title)"
         />
-        <ul class="app__list">
-            <WorkCard
-                v-for="(work, i) in workList"
-                v-bind="work"
-                @change="updateIsDone(i, $event)"
-                @delete="removeWork(i)"
-            />
-        </ul>
+        <WorkList />
     </div>
 </template>
 
@@ -47,11 +40,6 @@ onMounted(() => {
         padding-bottom: 8px;
         margin-bottom: 16px;
         border-bottom: 1px solid gray;
-    }
-
-    &__list {
-        display: grid;
-        gap: 8px;
     }
 }
 </style>
