@@ -17,7 +17,7 @@ export const storageLoad = (): Work[] => {
     const workList: Work[] = [];
     data.split("&").forEach((data) => {
         const work: Work = JSON.parse(data);
-        workList.push(createWork(work.content, work.isDone, work.title));
+        workList.push(work);
     });
     return workList;
 };
