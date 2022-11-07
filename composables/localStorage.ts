@@ -1,4 +1,4 @@
-import Work from "~~/types/Work";
+import { Work } from "~~/types/work";
 
 const ITEM_NAME = "workList";
 

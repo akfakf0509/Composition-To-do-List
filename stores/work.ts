@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import Work from "~~/types/Work";
+import { Work } from "~~/types/work";
 
 export const useWorkStore = defineStore("work", () => {
     const idIndex = ref(0);

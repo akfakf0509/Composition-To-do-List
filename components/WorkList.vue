@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useWorkStore } from "~~/stores/work";
-import Work from "~~/types/Work";
+import { Work } from "~~/types/work";
 
 const store = useWorkStore();
 const { workList, updateIsDone, removeWork } = store;
