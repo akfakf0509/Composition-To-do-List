@@ -25,11 +25,15 @@ function emitCreate() {
     <form class="create-form" @submit.prevent="handleSubmit()">
         <label class="create-form__item">
             <p class="create-form__item__text">제목</p>
-            <input v-model="title" class="create-form__item__input" />
+            <input v-model="title" class="create-form__item__input" required />
         </label>
         <label class="create-form__item">
             <p class="create-form__item__text">내용</p>
-            <input v-model="content" class="create-form__item__input" />
+            <input
+                v-model="content"
+                class="create-form__item__input"
+                required
+            />
         </label>
         <button class="create-form__button" type="submit">생성하기</button>
     </form>
