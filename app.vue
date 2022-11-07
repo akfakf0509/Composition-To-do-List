@@ -1,35 +1,33 @@
 <script setup lang="ts">
-import { Work } from "./composables/work";
+import { useWorkStore } from "./stores/work";
 
-let workList = ref<Work[]>([]);
+const store = useWorkStore();
+const { workList, pushWork, removeWork, updateIsDone } = store;
 
-watch(
-    workList,
-    (value) => {
-        save(value);
-    },
-    { deep: true }
-);
-
-onBeforeMount(() => {
-    const loadedData = load();
-    if (loadedData) workList.value = loadedData;
+store.$onAction(({ after }) => {
+    after(() => {
+        storageSave(workList);
+    });
 });
 
-function updateIsDone(i: number, isDone: boolean) {
-    workList.value.splice(i, 1, { ...workList.value[i], isDone });
-}
-function pushWork(title: string, content: string) {
-    workList.value.push(createWork(content, false, title));
-}
-function removeWork(i: number) {
-    workList.value.splice(i, 1);
-}
+onMounted(() => {
+    store.$patch((state) => {
+        state.workList.splice(0, 0, ...storageLoad());
+        let largest = 0;
+        state.workList.forEach((work) => {
+            if (work.id > largest) largest = work.id;
+        });
+        state.idIndex = largest + 1;
+    });
+});
 </script>
 
 <template>
     <div class="app">
-        <CreateForm class="app__form" @create="pushWork" />
+        <CreateForm
+            class="app__form"
+            @create="(title, content) => pushWork(content, false, title)"
+        />
         <ul class="app__list">
             <WorkCard
                 v-for="(work, i) in workList"
