@@ -23,7 +23,7 @@ function search(text: string) {
             class="work-list__search"
             @search="search"
         />
-        <ul class="work-list__list">
+        <draggable tag="ul" class="work-list__list">
             <WorkCard
                 v-for="(work, i) in searchedWorkList"
                 v-bind="work"
@@ -31,7 +31,7 @@ function search(text: string) {
                 @change="updateIsDone(i, $event)"
                 @delete="removeWork(i)"
             />
-        </ul>
+        </draggable>
     </div>
 </template>
 
