@@ -1,36 +1,34 @@
 <script setup lang="ts">
+export type State = "todo" | "doing" | "done";
 export interface Props {
+    id: number;
+    title: string;
     content: string;
     createdDate: Date;
     doneDate?: Date;
-    id: number;
-    isDone: boolean;
-    title: string;
+    state: State;
 }
 export interface Emits {
-    (e: "change", isDone: boolean): void;
+    (e: "change", state: State): void;
     (e: "delete"): void;
 }
 
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
-const { content, createdDate, doneDate, id, isDone, title } = toRefs(props);
+const { id, title, content, createdDate, doneDate, state } = toRefs(props);
 
-const showDoneDate = computed(() => {
-    return !!doneDate?.value;
-});
-const titleClasses = computed(() => {
-    return [
-        "work-card__header__title",
-        { "work-card__header__title--done": isDone.value },
-    ];
-});
-const formattedCreatedDate = computed(() => {
-    return Intl.DateTimeFormat("ko", {
+const isDone = computed(() => state.value === "done");
+const showDoneDate = computed(() => !!doneDate?.value);
+const titleClasses = computed(() => [
+    "work-card__header__title",
+    { "work-card__header__title--done": isDone.value },
+]);
+const formattedCreatedDate = computed(() =>
+    Intl.DateTimeFormat("ko", {
         dateStyle: "long",
         timeStyle: "short",
-    }).format(createdDate.value);
-});
+    }).format(createdDate.value)
+);
 const formattedDoneDate = computed(() => {
     if (!doneDate?.value) return "";
     return Intl.DateTimeFormat("ko", {
@@ -39,8 +37,12 @@ const formattedDoneDate = computed(() => {
     }).format(doneDate.value);
 });
 
-function emitChange() {
-    emit("change", !isDone.value);
+function handleCheckBoxChange(e: Event) {
+    const checkbox = e.target as HTMLInputElement;
+    emitChange(checkbox.checked ? "done" : "todo");
+}
+function emitChange(state: State) {
+    emit("change", state);
 }
 function emitDelete() {
     if (confirm("정말 삭제할까요?")) emit("delete");
@@ -55,7 +57,7 @@ function emitDelete() {
                 class="work-card__header__checkbox"
                 type="checkbox"
                 :checked="isDone"
-                @change="emitChange()"
+                @change="handleCheckBoxChange"
             />
             <label :for="`checkbox-${id}`" :class="titleClasses">
                 {{ title }}

@@ -26,7 +26,7 @@ onMounted(() => {
     <div class="app">
         <CreateForm
             class="app__form"
-            @create="(title, content) => pushWork(content, false, title)"
+            @create="(title, content) => pushWork(content, 'todo', title)"
         />
         <WorkList />
     </div>
