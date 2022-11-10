@@ -41,6 +41,10 @@ function handleCheckBoxChange(e: Event) {
     const checkbox = e.target as HTMLInputElement;
     emitChange(checkbox.checked ? "done" : "todo");
 }
+function handleSelectChange(e: Event) {
+    const select = e.target as HTMLInputElement;
+    emitChange(select.value as State);
+}
 function emitChange(state: State) {
     emit("change", state);
 }
@@ -75,7 +79,16 @@ function emitDelete() {
                 </span>
             </template>
         </p>
-        <button class="work-card__delete" @click="emitDelete()">삭제</button>
+        <div class="work-card__actions">
+            <select :value="state" @change="handleSelectChange">
+                <option value="todo">해야 할 일</option>
+                <option value="doing">하는 중</option>
+                <option value="done">끗</option>
+            </select>
+            <button class="work-card__actions__item" @click="emitDelete()">
+                삭제
+            </button>
+        </div>
     </li>
 </template>
 
@@ -104,10 +117,12 @@ function emitDelete() {
         color: darkgray;
         font-size: 0.8rem;
     }
-    &__delete {
+    &__actions {
         position: absolute;
         top: 12px;
         right: 12px;
+        display: flex;
+        gap: 4px;
     }
 }
 </style>
