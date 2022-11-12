@@ -3,16 +3,29 @@ import { useWorkStore } from "~~/stores/work";
 import { Work } from "~~/types/work";
 
 const store = useWorkStore();
-const { workList, updateIsDone, removeWork } = store;
+const { sortedWorkList, updateIsDone, removeWork } = store;
 
-const searchedWorkList = ref<Work[]>(workList);
+const searchedWorkList = ref<Work[]>(sortedWorkList);
 const searchText = ref("");
 
+let startIndex: number;
+
 function search(text: string) {
-    if (!text) searchedWorkList.value = workList;
-    searchedWorkList.value = workList.filter((work) => {
+    if (!text) searchedWorkList.value = sortedWorkList;
+    searchedWorkList.value = sortedWorkList.filter((work) => {
         return work.content.includes(text) || work.title.includes(text);
     });
+}
+function handleDragOver(e: DragEvent) {
+    e.preventDefault();
+}
+function handleDragStart(i: number) {
+    startIndex = i;
+}
+function handleDrop(i: number) {
+    const target = searchedWorkList.value[startIndex];
+    searchedWorkList.value.splice(startIndex, 1);
+    searchedWorkList.value.splice(i, 0, target);
 }
 </script>
 
@@ -28,8 +41,12 @@ function search(text: string) {
                 v-for="(work, i) in searchedWorkList"
                 v-bind="work"
                 class="work-list__list__item"
+                draggable="true"
                 @change="updateIsDone(i, $event)"
                 @delete="removeWork(i)"
+                @dragover="handleDragOver($event)"
+                @dragstart="handleDragStart(i)"
+                @drop="handleDrop(i)"
             />
         </ul>
     </div>
