@@ -36,6 +36,7 @@ function handleDrop(i: number) {
             class="work-list__search"
             @search="search"
         />
+        <SortSelect />
         <ul class="work-list__list">
             <WorkCard
                 v-for="(work, i) in searchedWorkList"
