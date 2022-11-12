@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { Sort } from "~~/types/sort";
 import { State, Work } from "~~/types/work";
 
 export const useWorkStore = defineStore("work", () => {
@@ -7,7 +8,7 @@ export const useWorkStore = defineStore("work", () => {
     const sort = ref<Sort>("created");
     const customIndexMap = ref<Record<number, number>>({});
 
-    const sortedWorkList = computed(() => {
+    const sortedWorkList = computed<Work[]>(() => {
         if (sort.value === "custom")
             return workList.value.sort((firstWork, lastWork) =>
                 sortByCustom(firstWork, lastWork, customIndexMap.value)
@@ -22,6 +23,9 @@ export const useWorkStore = defineStore("work", () => {
             state,
             doneDate,
         });
+    }
+    function updateSort(newSort: Sort) {
+        sort.value = newSort;
     }
     function pushWork(
         content: Work["content"] = "",
@@ -47,12 +51,11 @@ export const useWorkStore = defineStore("work", () => {
         customIndexMap,
         sortedWorkList,
         updateIsDone,
+        updateSort,
         pushWork,
         removeWork,
     };
 });
-
-type Sort = "alphabetical" | "created" | "custom" | "done";
 
 const sortMap: Record<Sort, (firstWork: Work, lastWork: Work) => number> = {
     alphabetical: sortByAlphabetical,
