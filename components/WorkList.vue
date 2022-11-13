@@ -34,7 +34,7 @@ function handleDrop(id: number) {
 <template>
     <div class="work-list">
         <SearchBar class="work-list__search" @search="search" />
-        <SortSelect />
+        <SortSelect class="work-list__sort" />
         <ul class="work-list__list">
             <WorkCard
                 v-for="work in searchedWorkList"
@@ -55,6 +55,9 @@ function handleDrop(id: number) {
 <style lang="scss" scoped>
 .work-list {
     &__search {
+        margin-bottom: 8px;
+    }
+    &__sort {
         margin-bottom: 8px;
     }
     &__list {
