@@ -6,13 +6,13 @@ const { workList, pushWork } = store;
 
 store.$onAction(({ after }) => {
     after(() => {
-        storageSave(workList);
+        storageSaveWorkList(workList);
     });
 });
 
 onMounted(() => {
     store.$patch((state) => {
-        state.workList.splice(0, 0, ...storageLoad());
+        state.workList.splice(0, 0, ...storageLoadWorkList());
         let largest = 0;
         state.workList.forEach((work) => {
             if (work.id > largest) largest = work.id;
