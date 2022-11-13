@@ -1,6 +1,9 @@
+import { Sort } from "~~/types/sort";
 import { Work } from "~~/types/work";
 
-const ITEM_NAME = "workList";
+const WORK_LIST_KEY = "workList";
+const SORT_KEY = "sort";
+const CUSTOM_INDEX_MAP_KEY = "customIndexMap";
 
 export const storageSaveWorkList = (workList: Work[]) => {
     let convertedStr = "";
@@ -8,11 +11,14 @@ export const storageSaveWorkList = (workList: Work[]) => {
         convertedStr += JSON.stringify(work);
         if (index + 1 < workList.length) convertedStr += "&";
     });
-    localStorage.setItem(ITEM_NAME, convertedStr);
+    localStorage.setItem(WORK_LIST_KEY, convertedStr);
+};
+export const storageSaveSort = (sort: Sort) => {
+    localStorage.setItem(SORT_KEY, sort);
 };
 
 export const storageLoadWorkList = (): Work[] => {
-    const data = localStorage.getItem(ITEM_NAME);
+    const data = localStorage.getItem(WORK_LIST_KEY);
     if (!data) return [];
     const workList: Work[] = [];
     data.split("&").forEach((data) => {
@@ -23,6 +29,13 @@ export const storageLoadWorkList = (): Work[] => {
     });
     return workList;
 };
+export const storageLoadSort = (): Sort => {
+    return localStorage.getItem(SORT_KEY) as Sort;
+};
+
 export const storageClearWorkList = () => {
-    localStorage.removeItem(ITEM_NAME);
+    localStorage.removeItem(WORK_LIST_KEY);
+};
+export const storageClearSort = () => {
+    localStorage.removeItem(SORT_KEY);
 };
