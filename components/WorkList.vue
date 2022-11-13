@@ -37,7 +37,7 @@ function handleDrop(id: number) {
         <SortSelect />
         <ul class="work-list__list">
             <WorkCard
-                v-for="(work, i) in searchedWorkList"
+                v-for="work in searchedWorkList"
                 :key="work.id"
                 v-bind="work"
                 class="work-list__list__item"
