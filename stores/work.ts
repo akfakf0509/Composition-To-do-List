@@ -56,9 +56,13 @@ export const useWorkStore = defineStore("work", () => {
         if (sort.value === "custom") removeCustomIndexMap(removedWork[0]);
     }
     function resetCustomIndexMap() {
-        workList.value.forEach(
-            (work, i) => (customIndexMap.value[work.id] = i)
-        );
+        const loadedCustomIndexMap = storageLoadCustomIndexMap();
+        if (Object.keys(loadedCustomIndexMap).length)
+            customIndexMap.value = loadedCustomIndexMap;
+        else
+            workList.value.forEach(
+                (work, i) => (customIndexMap.value[work.id] = i)
+            );
     }
 
     function pushCustomIndexMap(work: Work) {
