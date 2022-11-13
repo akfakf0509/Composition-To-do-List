@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import { storeToRefs } from "pinia";
 import { useWorkStore } from "~~/stores/work";
 
 const store = useWorkStore();
-const { sort, updateSort } = store;
+const { updateSort } = store;
+const { sort } = storeToRefs(store);
 
 const modelSort = computed({
-    get: () => sort,
+    get: () => sort.value,
     set: (value) => {
         updateSort(value);
     },
