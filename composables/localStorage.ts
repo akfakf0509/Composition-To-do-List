@@ -16,6 +16,11 @@ export const storageSaveWorkList = (workList: Work[]) => {
 export const storageSaveSort = (sort: Sort) => {
     localStorage.setItem(SORT_KEY, sort);
 };
+export const storageSaveCustomIndexMap = (
+    customIndexMap: Record<number, number>
+) => {
+    localStorage.setItem(CUSTOM_INDEX_MAP_KEY, JSON.stringify(customIndexMap));
+};
 
 export const storageLoadWorkList = (): Work[] => {
     const data = localStorage.getItem(WORK_LIST_KEY);
@@ -30,7 +35,14 @@ export const storageLoadWorkList = (): Work[] => {
     return workList;
 };
 export const storageLoadSort = (): Sort => {
-    return localStorage.getItem(SORT_KEY) as Sort;
+    const data = localStorage.getItem(SORT_KEY);
+    if (!data) return "created";
+    return data as Sort;
+};
+export const storageLoadCustomIndexMap = (): Record<number, number> => {
+    const data = localStorage.getItem(CUSTOM_INDEX_MAP_KEY);
+    if (!data) return {};
+    return JSON.parse(data);
 };
 
 export const storageClearWorkList = () => {
