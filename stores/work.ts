@@ -17,7 +17,8 @@ export const useWorkStore = defineStore("work", () => {
         return copyWorkList.sort(sortMap[sort.value]);
     });
 
-    function updateIsDone(index: number, state: State) {
+    function updateState(id: number, state: State) {
+        const index = workList.value.findIndex((work) => work.id === id);
         let doneDate = state === "done" ? new Date() : undefined;
         workList.value.splice(index, 1, {
             ...workList.value[index],
@@ -49,7 +50,8 @@ export const useWorkStore = defineStore("work", () => {
         workList.value.push(newWork);
         if (sort.value === "custom") pushCustomIndexMap(newWork);
     }
-    function removeWork(index: number) {
+    function removeWork(id: number) {
+        const index = workList.value.findIndex((work) => work.id === id);
         const removedWork = workList.value.splice(index, 1);
         if (sort.value === "custom") removeCustomIndexMap(removedWork[0]);
     }
@@ -72,7 +74,7 @@ export const useWorkStore = defineStore("work", () => {
         sort,
         customIndexMap,
         sortedWorkList,
-        updateIsDone,
+        updateState,
         updateSort,
         updateCustomIndexMap,
         pushWork,
@@ -108,8 +110,9 @@ function sortByCustom(
     return 0;
 }
 function sortByDone(firstWork: Work, lastWork: Work) {
-    if (!firstWork.doneDate || !lastWork.doneDate) return 0;
-    if (firstWork.doneDate > lastWork.doneDate) return 1;
-    if (firstWork.doneDate < lastWork.doneDate) return -1;
+    if (!firstWork.doneDate) return 1;
+    if (!lastWork.doneDate) return -1;
+    if (firstWork.doneDate > lastWork.doneDate) return -1;
+    if (firstWork.doneDate < lastWork.doneDate) return 1;
     return 0;
 }
