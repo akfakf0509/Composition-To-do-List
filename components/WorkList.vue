@@ -1,53 +1,53 @@
 <script setup lang="ts">
+import { storeToRefs } from "pinia";
 import { useWorkStore } from "~~/stores/work";
-import { Work } from "~~/types/work";
 
 const store = useWorkStore();
-const { sortedWorkList, updateIsDone, removeWork } = store;
+const { updateState, updateCustomIndexMap, removeWork } = store;
+const { sort, sortedWorkList } = storeToRefs(store);
 
-const searchedWorkList = ref<Work[]>(sortedWorkList);
+let startId: number;
 const searchText = ref("");
 
-let startIndex: number;
+const searchedWorkList = computed(() =>
+    sortedWorkList.value.filter(
+        (work) =>
+            work.content.includes(searchText.value) ||
+            work.title.includes(searchText.value)
+    )
+);
 
 function search(text: string) {
-    if (!text) searchedWorkList.value = sortedWorkList;
-    searchedWorkList.value = sortedWorkList.filter((work) => {
-        return work.content.includes(text) || work.title.includes(text);
-    });
+    searchText.value = text;
 }
 function handleDragOver(e: DragEvent) {
     e.preventDefault();
 }
-function handleDragStart(i: number) {
-    startIndex = i;
+function handleDragStart(id: number) {
+    startId = id;
 }
-function handleDrop(i: number) {
-    const target = searchedWorkList.value[startIndex];
-    searchedWorkList.value.splice(startIndex, 1);
-    searchedWorkList.value.splice(i, 0, target);
+function handleDrop(id: number) {
+    updateCustomIndexMap(startId, id);
 }
 </script>
 
 <template>
     <div class="work-list">
-        <SearchBar
-            v-model="searchText"
-            class="work-list__search"
-            @search="search"
-        />
+        {{ searchedWorkList }}
+        <SearchBar class="work-list__search" @search="search" />
         <SortSelect />
         <ul class="work-list__list">
             <WorkCard
                 v-for="(work, i) in searchedWorkList"
+                :key="work.id"
                 v-bind="work"
                 class="work-list__list__item"
-                draggable="true"
-                @change="updateIsDone(i, $event)"
-                @delete="removeWork(i)"
+                :draggable="sort === 'custom' ? 'true' : 'false'"
+                @change="updateState(work.id, $event)"
+                @delete="removeWork(work.id)"
                 @dragover="handleDragOver($event)"
-                @dragstart="handleDragStart(i)"
-                @drop="handleDrop(i)"
+                @dragstart="handleDragStart(work.id)"
+                @drop="handleDrop(work.id)"
             />
         </ul>
     </div>
