@@ -48,8 +48,8 @@ function handleSelectChange(e: Event) {
 function emitChange(state: State) {
     emit("change", state);
 }
-function emitDelete() {
-    if (confirm("정말 삭제할까요?")) emit("delete");
+function emitDelete(e: MouseEvent) {
+    if (e.shiftKey || confirm("정말 삭제할까요?")) emit("delete");
 }
 </script>
 
@@ -85,7 +85,7 @@ function emitDelete() {
                 <option value="doing">하는 중</option>
                 <option value="done">끗</option>
             </select>
-            <button class="work-card__actions__item" @click="emitDelete()">
+            <button class="work-card__actions__item" @click="emitDelete">
                 삭제
             </button>
         </div>
