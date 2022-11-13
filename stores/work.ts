@@ -55,15 +55,17 @@ export const useWorkStore = defineStore("work", () => {
         const removedWork = workList.value.splice(index, 1);
         if (sort.value === "custom") removeCustomIndexMap(removedWork[0]);
     }
+    function resetCustomIndexMap() {
+        workList.value.forEach(
+            (work, i) => (customIndexMap.value[work.id] = i)
+        );
+    }
 
     function pushCustomIndexMap(work: Work) {
         customIndexMap.value[work.id] = workList.value.length - 1;
     }
     function removeCustomIndexMap(work: Work) {
         delete customIndexMap.value[work.id];
-    }
-    function resetCustomIndexMap() {
-        workList.value.forEach((work, i) => updateCustomIndexMap(work.id, i));
     }
 
     return {
@@ -77,6 +79,7 @@ export const useWorkStore = defineStore("work", () => {
         updateCustomIndexMap,
         pushWork,
         removeWork,
+        resetCustomIndexMap,
     };
 });
 

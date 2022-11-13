@@ -9,7 +9,7 @@ store.$onAction(({ after, name, store }) => {
         if (["updateState", "pushWork", "removeWork"].includes(name))
             storageSaveWorkList(store.workList);
         if (name === "updateSort") storageSaveSort(store.sort);
-        if (name === "updateCustomIndexMap")
+        if (["updateCustomIndexMap", "resetCustomIndexMap"].includes(name))
             storageSaveCustomIndexMap(store.customIndexMap);
     });
 });
