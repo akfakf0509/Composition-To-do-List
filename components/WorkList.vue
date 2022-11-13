@@ -33,7 +33,6 @@ function handleDrop(id: number) {
 
 <template>
     <div class="work-list">
-        {{ searchedWorkList }}
         <SearchBar class="work-list__search" @search="search" />
         <SortSelect />
         <ul class="work-list__list">
