@@ -1,21 +1,19 @@
 <script setup lang="ts">
-import { Sort } from "~~/types/sort";
 import { useWorkStore } from "~~/stores/work";
-import { storeToRefs } from "pinia";
 
 const store = useWorkStore();
-const { updateSort } = store;
-const { sort } = storeToRefs(store);
+const { sort, updateSort } = store;
 
-function handleChange(e: Event) {
-    const select = e.target as HTMLInputElement;
-    updateSort(select.value as Sort);
-}
+const modelSort = computed({
+    get: () => sort,
+    set: (value) => {
+        updateSort(value);
+    },
+});
 </script>
 
 <template>
-    {{ sort }}
-    <select :value="sort" @change="handleChange">
+    <select v-model="modelSort">
         <option value="alphabetical">이름 순</option>
         <option value="created">생성 순</option>
         <option value="custom">커스텀</option>
