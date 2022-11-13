@@ -9,6 +9,8 @@ store.$onAction(({ after, name, store }) => {
         if (["updateState", "pushWork", "removeWork"].includes(name))
             storageSaveWorkList(store.workList);
         if (name === "updateSort") storageSaveSort(store.sort);
+        if (name === "updateCustomIndexMap")
+            storageSaveCustomIndexMap(store.customIndexMap);
     });
 });
 
@@ -16,6 +18,7 @@ onMounted(() => {
     store.$patch((state) => {
         state.workList.splice(0, 0, ...storageLoadWorkList());
         state.sort = storageLoadSort();
+        state.customIndexMap = storageLoadCustomIndexMap();
         let largest = 0;
         state.workList.forEach((work) => {
             if (work.id > largest) largest = work.id;
