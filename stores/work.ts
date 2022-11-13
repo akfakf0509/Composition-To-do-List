@@ -63,9 +63,7 @@ export const useWorkStore = defineStore("work", () => {
         delete customIndexMap.value[work.id];
     }
     function resetCustomIndexMap() {
-        workList.value.forEach(
-            (work, i) => (customIndexMap.value[work.id] = i)
-        );
+        workList.value.forEach((work, i) => updateCustomIndexMap(work.id, i));
     }
 
     return {
