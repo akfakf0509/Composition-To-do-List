@@ -2,17 +2,20 @@
 import { useWorkStore } from "./stores/work";
 
 const store = useWorkStore();
-const { workList, pushWork } = store;
+const { pushWork } = store;
 
-store.$onAction(({ after }) => {
+store.$onAction(({ after, name, store }) => {
     after(() => {
-        storageSaveWorkList(workList);
+        if (["updateState", "pushWork", "removeWork"].includes(name))
+            storageSaveWorkList(store.workList);
+        if (name === "updateSort") storageSaveSort(store.sort);
     });
 });
 
 onMounted(() => {
     store.$patch((state) => {
         state.workList.splice(0, 0, ...storageLoadWorkList());
+        state.sort = storageLoadSort();
         let largest = 0;
         state.workList.forEach((work) => {
             if (work.id > largest) largest = work.id;
