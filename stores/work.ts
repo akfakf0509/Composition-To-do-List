@@ -14,6 +14,10 @@ export const useWorkStore = defineStore("work", () => {
             return copyWorkList.sort((firstWork, lastWork) =>
                 sortByCustom(firstWork, lastWork, customIndexMap.value)
             );
+        if (sort.value === "done")
+            return copyWorkList
+                .filter((work) => !!work.doneDate)
+                .sort((firstWork, lastWork) => sortByDone(firstWork, lastWork));
         return copyWorkList.sort(sortMap[sort.value]);
     });
 
